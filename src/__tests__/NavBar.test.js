@@ -1,34 +1,19 @@
-import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import NavBar from '../NavBar';
 
-import NavBar from "../components/NavBar";
-
-test("renders a <nav> element", () => {
-  const { container } = render(<NavBar />);
-
-  const nav = container.querySelector("nav");
-  expect(nav).toBeInTheDocument();
-});
-
-test("renders two <a> elements inside the <nav> element", () => {
-  const { container } = render(<NavBar />);
-
-  const nav = container.querySelector("nav");
-  const anchorTags = nav.querySelectorAll("a"); // find all the child <a> elements
-
-  expect(anchorTags).toHaveLength(2);
+test("renders the correct number of <a> elements inside the <nav> element", () => {
+  render(<NavBar />);
+  const anchorTags = screen.getAllByRole("link");
+  expect(anchorTags).toHaveLength(4); 
 });
 
 test("renders each <a> element with the correct attributes", () => {
   render(<NavBar />);
-
-  const home = screen.queryByText(/home/i);
-
-  expect(home).toBeInTheDocument();
-  expect(home).toHaveAttribute("href", expect.stringContaining("#home"));
-
-  const about = screen.queryByText(/about/i);
-
-  expect(about).toBeInTheDocument();
-  expect(about).toHaveAttribute("href", expect.stringContaining("#about"));
+  const about = screen.getByText(/about/i);
+  expect(about).toHaveAttribute("href", "/about");
+  const portfolio = screen.getByText(/portfolio/i); 
+  expect(portfolio).toHaveAttribute("href", "/portfolio");
+  const contact = screen.getByText(/contact/i);
+  expect(contact).toHaveAttribute("href", "/contact");
 });
